@@ -1,0 +1,135 @@
+Price To Sell | Hacker Rank Problem (Interview Question)
+
+
+
+A real estate agent is advising a seller on the price to ask for a home. To do this, the agent will look at homes that have been sold in
+the area and base the valuation on this data. The only factors that will be considered are square footage and sale price.
+
+The agent starts by removing any outliers from the list of comparable homes. 
+To determine the outliers:
+
+i. Select the home to test.
+ii. create a list of prices of other homes of the same size. it will be called compList in the examples.
+iii.if there are no other homes of the same size, the house being tested is not an outlier.
+iv. otherwise:
+  1. calculate the mean price, P[m], and the standard deviation, for the home compList.
+  2. if | price[i] - p[m]| > 3 * standard_deviation, the house is an outlier.
+  
+The valuation is then calculated against the resulting list using the following rules:
+i. if there are no houses in the list , use 1000 per square foot as the price.
+ii. if there is only 1 house in the list, it's square foot price is used.
+iii. if there are 1 or more houses in the list with the exact square footage of the house to price, use the mean of those prices.
+iv. if the required square footage is between the square footage of two houses in the list, interpolate the square foot price using 
+the means of the closest higher and the lower-priced homes.
+v. if the required square footage is outside of the range of houses listed, extrapolate the price based on the means of the two square 
+footage values that are closest to the home to value.
+
+
+In all cases, if the final price is less than 10^3 or greater than 10^6, the price will be 10^3 and 10^6, respectively. For any square
+footage , the square foot price is the mean of the prices at the square footage. Return  an integer that represents the valuation of the 
+seller's house.
+
+
+Examples:
+
+There are n=6, houses with,
+area = [1200, 1300, 1200, 1300, 1200, 2000],
+price = [12000, 24000, 14000, 22000, 13000, 30000]
+
+and the house to value has reqArea = 1500 square feet.
+
+The following table shows the test for outliers:
+
+To Test
+ ____________________________________________________________________________________________________________________________________
+| area/prices     |     compList     |     P[m]    |   σ (standard deviation)     |       |price - P[m]|    |  3 * σ   |  Is Outlier? |
+|_____________________________________________________________________________________________________________________________________|
+| 1200/12000      | [14000, 13000]   |  13500      |     500                      |      15000              | 15000    |  False       |
+|-------------------------------------------------------------------------------------------------------------------------------------|
+| 1300/24000      | [22000]          |  22000      |      0                       |      2000               |   0      | True         |
+|-------------------------------------------------------------------------------------------------------------------------------------|
+| 1200/14000      | [12000, 13000]   |  12500      |     500                      |      15000              |   0      | False        |
+|-------------------------------------------------------------------------------------------------------------------------------------|
+| 1300/22000      | [24000]          |  24000      |     0                        |      2000               |   0      | True         |
+|-------------------------------------------------------------------------------------------------------------------------------------|
+| 1200/13000      | [12000, 14000]   |  13000      |    1000                      |     3000                |   3000   | False        |
+|-------------------------------------------------------------------------------------------------------------------------------------|
+| 2000/30000      | []               |  NIL        |    N/A                       |                         |          | False *      |
+|_____________________________________________________________________________________________________________________________________|
+
+
+
+* There is only one house with this area, so it cannot be an outlier.
+
+The 1300 square foot hosue are both outliers, so they are discarded. The new array are 
+area = [1200, 1200, 1200, 2000] and 
+price = [12000, 14000, 13000, 30000].
+
+Interpolate the price between the two houses sizes remaining.
+The interpolated price is,
+13000 + (30000 - 13000)/(2000 - 1200) * (1500-1200) = 19375.
+
+
+Function Description:
+Complete the function valuation in the editor below. The function must return the expected price rounded to the nearest integer.
+
+valuation has the following parameter(s):
+int reqArea: the area of the seller's house in square feet
+int area[n]: each value is an area of a house sold in the past
+int price[n]: price[i] is the price of the ith hosue in area[]
+
+Constraints
+i. 500 <= reqArea <= 10^5
+ii. 500 <= area[i] <= 10^5 for all i such that 0 <= i <n
+iii. 10^3 <= price[i] <= 10^6 for all i such that 0<= i <n
+iv. 1 <= n <= 10^5
+
+------------------------------------------------------------------------------------------------------------------------------------
+Sample Input for custom testing:
+
+Sample: 1
+reqArea = 1200
+area = [1500, 500, 1000, 2000, 2500]
+price = [30000, 10000, 20000, 40000, 50000]
+
+output: 24000
+
+
+Sample: 2
+reqArea = 2500
+area = [1200, 1200, 1200, 2000]
+price = [15000, 11000, 17000, 25000]
+
+output: 30625
+
+To Test
+ ____________________________________________________________________________________________________________________________________
+| area/prices     |     compList     |     P[m]    |   σ (standard deviation)     |       |price - P[m]|    |  3 * σ   |  Is Outlier? |
+|_____________________________________________________________________________________________________________________________________|
+| 1200/15000      | [11000, 17000]   |  14000      |    3000                      |       1000              |  9000    |  False       |
+|-------------------------------------------------------------------------------------------------------------------------------------|
+| 1200/11000      | [15000, 17000]   |  16000      |    1000                      |       5000              |  3000    | True         |
+|-------------------------------------------------------------------------------------------------------------------------------------|
+| 1200/17000      | [15000, 11000]   |  13000      |    2000                      |       4000              |  6000    | False        |
+|-------------------------------------------------------------------------------------------------------------------------------------|
+| 2000/25000      | []               |  NIL        |    N/A                       |                         |          | False *      |
+|_____________________________________________________________________________________________________________________________________|
+
+
+* There is only one house of this area, so it cannot be an outlier
+
+After removing the outlier, the new arrays are,
+area = [1200, 1200, 2000]
+price = [15000, 17000, 25000]
+
+The mean price for the 1200 square foot houses is 16000. The seller's house is larger than any of the comparable houses, so extrapolate
+its price : 25000 + (2500 - 2000) * (25000 - 16000) / (2000 - 1200) = 30625.
+
+Now, complete the function:
+public static long valuation(long reqArea, List<Long> area, List<Long> price){
+  //write your code here, use the sample test cases to check the validity of code.
+}
+
+
+
+
